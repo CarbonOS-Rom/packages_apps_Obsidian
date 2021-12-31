@@ -35,6 +35,7 @@ import com.android.settings.R;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settingslib.search.SearchIndexable;
+import com.carbon.obsidian.utils.PreferenceUtils;
 
 import com.android.internal.logging.nano.MetricsProto;
 
@@ -53,6 +54,12 @@ public class Catalysts extends SettingsPreferenceFragment {
         final Resources res = getResources();
         final PreferenceScreen prefScreen = getPreferenceScreen();
     }
+    
+   @Override
+    public void onResume() {
+        super.onResume();
+        PreferenceUtils.reloadCustomPrimarySwitches(getPreferenceScreen());
+    } 
 
     @Override
     public int getMetricsCategory() {
