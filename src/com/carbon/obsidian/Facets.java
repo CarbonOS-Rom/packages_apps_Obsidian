@@ -39,8 +39,10 @@ public class Facets extends SettingsPreferenceFragment {
 
     private static final String KEY_ICONS_CATEGORY = "themes_icons_category";
     private static final String KEY_SIGNAL_ICON = "android.theme.customization.signal_icon";
+    private static final String KEY_NAVBAR_ICON = "android.theme.customization.navbar";
 
     private PreferenceCategory mIconsCategory;
+    private Preference mNavbarIcon;
     private Preference mSignalIcon;
 
     @Override
@@ -49,11 +51,17 @@ public class Facets extends SettingsPreferenceFragment {
         addPreferencesFromResource(R.xml.category_facets);
 
         mIconsCategory = findPreference(KEY_ICONS_CATEGORY);
+        mNavbarIcon = findPreference(KEY_NAVBAR_ICON);
         mSignalIcon = findPreference(KEY_SIGNAL_ICON);
 
-        if (mIconsCategory != null && mSignalIcon != null
-                && !DeviceUtils.deviceSupportsMobileData(getContext())) {
-            mIconsCategory.removePreference(mSignalIcon);
+        final Context context = getContext();
+        if (mIconsCategory != null) {
+            if (mSignalIcon != null && !DeviceUtils.deviceSupportsMobileData(context)) {
+                mIconsCategory.removePreference(mSignalIcon);
+            }
+            if (mNavbarIcon != null && DeviceUtils.isEdgeToEdgeEnabled(context)) {
+                mIconsCategory.removePreference(mNavbarIcon);
+            }
         }
     }
 
@@ -83,6 +91,9 @@ public class Facets extends SettingsPreferenceFragment {
                     final List<String> keys = super.getNonIndexableKeys(context);
                     if (!DeviceUtils.deviceSupportsMobileData(context)) {
                         keys.add(KEY_SIGNAL_ICON);
+                    }
+                    if (DeviceUtils.isEdgeToEdgeEnabled(context)) {
+                        keys.add(KEY_NAVBAR_ICON);
                     }
                     return keys;
                 }
