@@ -7,6 +7,6 @@
 <resources
     xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">"
 
-    <color name="homepage_carbon_background">#0060FF</color>
-    <color name="homepage_obsidian_background">@color/homepage_carbon_background</color>
+    <color name="option_border_default">#5f6368</color>
+    <color name="homepage_obsidian_background">@color/option_border_default</color>
 </resources>

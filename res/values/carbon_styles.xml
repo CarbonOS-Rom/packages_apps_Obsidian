@@ -11,8 +11,12 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 
-    <style name="TextAppearance.TileTitle" parent="@*android:style/TextAppearance.DeviceDefault.Subhead"/>
-
+    <style name="OptionTitleTextAppearance" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight">15sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
 </resources>

@@ -23,5 +23,13 @@
           android:fragment="com.carbon.obsidian.Catalysts"
           android:layout="@layout/preference_category_catalysts"
           />
+          
+     <!-- Facets -->
+     <Preference
+          android:key="facets_settings"
+          android:title="@string/category_facets_title"
+          android:fragment="com.carbon.obsidian.Facets"
+          android:layout="@layout/preference_category_facets"
+          />
 
 </PreferenceScreen>
