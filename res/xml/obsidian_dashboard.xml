@@ -31,5 +31,13 @@
           android:fragment="com.carbon.obsidian.Facets"
           android:layout="@layout/preference_category_facets"
           />
+          
+        <!-- Strata -->
+     <Preference
+          android:key="strata_settings"
+          android:title="@string/category_strata_title"
+          android:fragment="com.carbon.obsidian.Strata"
+          android:layout="@layout/preference_category_strata"
+          />
 
 </PreferenceScreen>
