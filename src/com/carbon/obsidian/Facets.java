@@ -15,51 +15,53 @@
  */
 package com.carbon.obsidian;
 
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.provider.SearchIndexableResource;
 
-import androidx.preference.PreferenceCategory;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceScreen;
-import androidx.preference.Preference.OnPreferenceChangeListener;
-import androidx.preference.SwitchPreference;
-
-import com.android.settings.R;
-import com.android.settings.search.BaseSearchIndexProvider;
-import com.android.settings.SettingsPreferenceFragment;
-import com.android.settingslib.search.SearchIndexable;
-import com.carbon.obsidian.utils.PreferenceUtils;
+import androidx.preference.PreferenceCategory;
 
 import com.android.internal.logging.nano.MetricsProto;
+import com.android.settings.R;
+import com.android.settings.SettingsPreferenceFragment;
+import com.android.settings.search.BaseSearchIndexProvider;
+import com.android.settingslib.search.SearchIndexable;
 
-import java.util.ArrayList;
+import com.carbon.obsidian.utils.DeviceUtils;
+import com.carbon.obsidian.utils.PreferenceUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
 @SearchIndexable
 public class Facets extends SettingsPreferenceFragment {
 
+    private static final String KEY_ICONS_CATEGORY = "themes_icons_category";
+    private static final String KEY_SIGNAL_ICON = "android.theme.customization.signal_icon";
+
+    private PreferenceCategory mIconsCategory;
+    private Preference mSignalIcon;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        addPreferencesFromResource(R.xml.category_catalysts);
-        PreferenceScreen prefSet = getPreferenceScreen();
-        final Resources res = getResources();
-        final PreferenceScreen prefScreen = getPreferenceScreen();
+        addPreferencesFromResource(R.xml.category_facets);
+
+        mIconsCategory = findPreference(KEY_ICONS_CATEGORY);
+        mSignalIcon = findPreference(KEY_SIGNAL_ICON);
+
+        if (mIconsCategory != null && mSignalIcon != null
+                && !DeviceUtils.deviceSupportsMobileData(getContext())) {
+            mIconsCategory.removePreference(mSignalIcon);
+        }
     }
-    
-   @Override
+
+    @Override
     public void onResume() {
         super.onResume();
         PreferenceUtils.reloadCustomPrimarySwitches(getPreferenceScreen());
-    } 
+    }
 
     @Override
     public int getMetricsCategory() {
@@ -72,13 +74,16 @@ public class Facets extends SettingsPreferenceFragment {
                 public List<SearchIndexableResource> getXmlResourcesToIndex(
                         Context context, boolean enabled) {
                     final SearchIndexableResource sir = new SearchIndexableResource(context);
-                    sir.xmlResId = R.xml.category_catalysts;
+                    sir.xmlResId = R.xml.category_facets;
                     return Arrays.asList(sir);
                 }
 
                 @Override
                 public List<String> getNonIndexableKeys(Context context) {
                     final List<String> keys = super.getNonIndexableKeys(context);
+                    if (!DeviceUtils.deviceSupportsMobileData(context)) {
+                        keys.add(KEY_SIGNAL_ICON);
+                    }
                     return keys;
                 }
             };
