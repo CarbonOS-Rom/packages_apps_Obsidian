@@ -11,10 +11,6 @@
     <PreferenceCategory
         android:key="spoofing_system_wide_category"
         android:title="@string/spoofing_system_wide_category">
-        
-        <!-- Keybox Data -->
-        <com.carbon.obsidian.preferences.KeyboxDataPreference
-           android:title="@string/keybox_data_title" />
             
         <!-- GMS spoof -->
         <com.carbon.obsidian.preferences.SystemPropertySwitchPreference
@@ -22,6 +18,17 @@
             android:title="@string/gms_spoof_title"
             android:summary="@string/gms_spoof_summary"
             android:defaultValue="true" />
+            
+        <!-- Keybox Data -->
+        <com.carbon.obsidian.preferences.KeyboxDataPreference
+            android:key="keybox_data_setting"
+            android:title="@string/keybox_data_title" />
+
+        <!-- Block attestation even with Keybox Data -->
+        <com.carbon.obsidian.preferences.SystemPropertySwitchPreference
+            android:key="persist.sys.pixelprops.gmscertchain"
+            android:title="@string/pi_gmscertchain_title"
+            android:summary="@string/pi_gmscertchain_summary" />
 
         <Preference
             android:key="show_pif_properties"
