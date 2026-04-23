@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.lightning.thunderbolt.fragments.lightningperks
+package com.carbon.obsidian.fragments.catalysts
 
 import android.app.ActivityManager
 import android.content.pm.ApplicationInfo
@@ -347,7 +347,7 @@ private fun TensorTargetsContent(context: android.content.Context) {
                         shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
-                            stringResource(R.string.ts_select_all),
+                            stringResource(R.string.action_select_all),
                             style = MaterialTheme.typography.labelMedium,
                         )
                     }
@@ -364,7 +364,7 @@ private fun TensorTargetsContent(context: android.content.Context) {
                         shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
-                            stringResource(R.string.ts_reset),
+                            stringResource(R.string.action_reset),
                             style = MaterialTheme.typography.labelMedium,
                         )
                     }
