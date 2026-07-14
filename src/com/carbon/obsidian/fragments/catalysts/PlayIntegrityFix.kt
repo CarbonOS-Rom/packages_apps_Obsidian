@@ -72,7 +72,7 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
                     try {
                         val patch = JSONObject(normalized).optString("SECURITY_PATCH")
                         if (patch.isNotEmpty()) {
-                            Settings.Secure.putString(requireContext().contentResolver, TrickyStore.PATCH_KEY, patch)
+                            updatePatchDateIfSimple(requireContext().contentResolver, patch)
                         }
                     } catch (_: Exception) {}
                     killGms()
@@ -216,9 +216,7 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
                 )
                 resultToSave.pifData.optString("SECURITY_PATCH")
                     .takeIf { it.isNotEmpty() }?.let {
-                        Settings.Secure.putString(
-                            requireContext().contentResolver, TrickyStore.PATCH_KEY, it
-                        )
+                        updatePatchDateIfSimple(requireContext().contentResolver, it)
                     }
                 killGms()
                 refreshStatus()
@@ -422,7 +420,7 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
                             result.pifData.toString(2)
                         )
                         result.pifData.optString("SECURITY_PATCH").takeIf { it.isNotEmpty() }?.let {
-                            Settings.Secure.putString(requireContext().contentResolver, TrickyStore.PATCH_KEY, it)
+                            updatePatchDateIfSimple(requireContext().contentResolver, it)
                         }
                         killGms()
                         toast(getString(R.string.pif_fetched_model, result.model))
@@ -521,6 +519,24 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
             "husky"      to 8,   // Pixel 8 Pro
             "shiba"      to 8,   // Pixel 8
         )
+        
+        /**
+         * Writes [patch] to PATCH_KEY only when the existing value is empty or
+         * a plain YYYY-MM-DD date. Per-package block content (lines containing
+         * '[', '=', or 'system=no') is preserved unchanged so that TEE-SIM
+         * style configs are not overwritten by canary auto-fetch.
+         */
+        private fun updatePatchDateIfSimple(
+            resolver: android.content.ContentResolver,
+            patch: String,
+        ) {
+            val existing = Settings.Secure.getString(resolver, TrickyStore.PATCH_KEY) ?: ""
+            val isSimple = existing.isEmpty() ||
+                existing.trim().matches(Regex("""\d{4}-\d{2}-\d{2}"""))
+            if (isSimple) {
+                Settings.Secure.putString(resolver, TrickyStore.PATCH_KEY, patch)
+            }
+        }
 
         private fun parsePatchDate(patch: String): java.util.Date? = try {
             java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US).parse(patch)
