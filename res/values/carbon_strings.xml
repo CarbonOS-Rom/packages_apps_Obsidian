@@ -16,4 +16,6 @@
     <!-- Obsidian -->
     <string name="obsidian_dashboard_title">Obsidian Control Center</string>
 
+    <!-- Categories -->
+    <string name="category_catalysts_title">Catalysts</string>
 </resources> 

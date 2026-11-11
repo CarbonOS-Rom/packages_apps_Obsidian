@@ -45,7 +45,7 @@ public class ObsidianDashboard extends SettingsPreferenceFragment {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsProto.MetricsEvent.CARBON;
+        return MetricsProto.MetricsEvent.OBSIDIAN;
     }
 
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
