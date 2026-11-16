@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.carbon.obsidianpreferences;
+package com.carbon.obsidian.preferences;
 
 import android.content.Context;
 import android.provider.Settings;

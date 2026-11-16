@@ -80,7 +80,6 @@ public class Spoofing extends SettingsPreferenceFragment implements
         if (mTensorTargets != null && PixelPropsUtils.isTensorPixelDevice()) {
             mFeaturesCategory.removePreference(mTensorTargets);
         }
-
         mPhotosSpoof = initAppSpoof(mPhotosSpoof, PHOTOS_PACKAGE);
         mSnapchatSpoof = initAppSpoof(mSnapchatSpoof, SNAPCHAT_PACKAGE);
     }
@@ -98,7 +97,6 @@ public class Spoofing extends SettingsPreferenceFragment implements
             mAppSpecificCategory.removePreference(pref);
             return null;
         }
-
         // SecureSettingSwitchPreference already syncs checked state from Settings.Secure
         pref.setOnPreferenceChangeListener(this);
         return pref;
@@ -168,5 +166,3 @@ public class Spoofing extends SettingsPreferenceFragment implements
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
             new BaseSearchIndexProvider(R.xml.spoofing);
 }
-
-

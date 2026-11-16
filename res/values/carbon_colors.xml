@@ -8,4 +8,5 @@
     xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">"
 
     <color name="homepage_carbon_background">#0060FF</color>
+    <color name="homepage_obsidian_background">@color/homepage_carbon_background</color>
 </resources>

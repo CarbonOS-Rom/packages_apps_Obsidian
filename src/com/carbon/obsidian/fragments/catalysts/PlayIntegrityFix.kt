@@ -31,6 +31,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.carbon.obsidian.fragments.catalysts.TrickyStore
 import org.json.JSONObject
 
 class PlayIntegrityFix : SettingsPreferenceFragment() {
@@ -566,6 +567,9 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
          */
         private fun getCanaryExpiryString(canaryMonth: String, releaseDate: String? = null): String? = try {
             val sdf = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
+            // Prefer the real release date (from the factory image's Last-Modified
+            // header) when we have one; fall back to assuming the 1st of the canary
+            // month only when it's unavailable, e.g. older saved configs.
             val base = sdf.parse(releaseDate ?: "$canaryMonth-01") ?: return null
             val expiry = java.util.Date(base.time + 42L * 24 * 60 * 60 * 1000)
             val expiryStr = sdf.format(expiry)
@@ -581,6 +585,9 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
         private fun getMatchingPixelDevice(devices: List<PifDevice>): PifDevice? {
             return try {
                 val codename = android.os.SystemProperties.get(MATCH_DEVICE_PROP, "")
+                // No longer requires the device to be in PIXEL_DEVICE_GENERATION — that
+                // map is just a sort-order preference, and would otherwise prevent
+                // matching on a current device that isn't in it yet.
                 devices.firstOrNull { it.device == codename }
             } catch (_: Exception) { null }
         }
@@ -694,6 +701,11 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
                         if (devices.isEmpty()) continue
 
                         val apiKey = fetchFlashToolApiKey()
+
+                        // Don't filter by PIXEL_DEVICE_GENERATION here — that map only
+                        // covers devices known when this was last updated, and would
+                        // otherwise silently hide a newer Pixel from the picker. Unknown
+                        // devices just sort last in fetchDevicesForChannel() instead.
                         return devices to apiKey
                     } catch (_: Exception) { continue }
                 }
@@ -705,6 +717,12 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
             }
         }
 
+        /**
+         * Extracts the Flash Tool API key from flash.android.com. Prefers the
+         * targeted data-client-config attribute (matching upstream autopif4.sh),
+         * falling back to a generic AIza-prefixed key scan if the page structure
+         * changes and the targeted extraction comes up empty.
+         */
         private fun fetchFlashToolApiKey(): String? {
             val flashHtml = try {
                 URL(FLASH_URL).readText(StandardCharsets.UTF_8)
@@ -720,6 +738,12 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
             return targeted ?: Regex("""AIza[0-9A-Za-z_-]{35}""").find(flashHtml)?.value
         }
 
+        /**
+         * HEAD-requests the factory image to read its Last-Modified header,
+         * giving a precise canary release date instead of assuming the 1st of
+         * the canary month. Returns a yyyy-MM-dd string, or null if it can't
+         * be determined.
+         */
         private fun fetchLastModifiedDate(url: String): String? {
             return try {
                 val conn = URL(url).openConnection() as java.net.HttpURLConnection
@@ -824,6 +848,11 @@ class PlayIntegrityFix : SettingsPreferenceFragment() {
             }
         }
 
+        /**
+         * Fetches the CarbonOS hosted pif.json as a fallback when the live
+         * Google OTA scraper returns no devices (e.g. no network at first boot
+         * or Google has not published a new beta build yet).
+         */
         private fun fetchFallbackPif(): PifFetchResult {
             return try {
                 val content = URL(FALLBACK_PIF_URL).readText(StandardCharsets.UTF_8)
