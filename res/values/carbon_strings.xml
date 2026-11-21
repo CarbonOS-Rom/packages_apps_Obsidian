@@ -14,7 +14,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Obsidian -->
-    <string name="obsidian_dashboard_title">Thunderbolt Control Center</string>
+    <string name="obsidian_dashboard_title">Obsidian</string>
     <string name="obsidian_summary_title">Carbon your Device</string>
     
     <!-- Categories -->
