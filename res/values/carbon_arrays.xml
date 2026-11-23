@@ -90,6 +90,7 @@
         <item>Realme 15 Pro 5G</item>
         <item>ROG Phone 9 Pro</item>
         <item>None</item>
+        </string-array>
         
         <string-array name="pif_spoof_vending_finger_entries">
         <item>@string/pif_vending_finger_disabled</item>
@@ -99,7 +100,6 @@
     <string-array name="pif_spoof_vending_finger_values">
         <item>0</item>
         <item>1</item>
-    </string-array>
     </string-array>
 
 <!-- Apps excluded from the Tensor targets picker -->
